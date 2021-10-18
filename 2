@@ -1,0 +1,45 @@
+//classResizeImage.php
+
+class ResizeImage
+{
+    var $image;
+
+    function load($file)
+    {
+        $this->image = imagecreatefrompng($file);
+    }
+
+    function getWidth()
+    {
+        return imagesx($this->image);
+    }
+    
+    function getHeight()
+    {
+        return imagesy($this->image);
+    }
+
+    function resize($width, $height)
+    {
+        $new_image = imagecreatetruecolor($width, $height);
+        imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
+        $this->image = $new_image;
+    }
+
+    function output()
+    {
+        imagepng($this->image);
+    }
+
+}
+
+
+//----------------------
+
+header('Content-Type:image/png');
+include('classResizeImage.php');
+$image = new ResizeImage();
+
+$image->load("assets/image.png");
+$image->resize(200,100);
+$image->output();
